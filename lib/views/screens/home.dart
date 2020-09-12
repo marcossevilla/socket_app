@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: bands.length,
         itemBuilder: (context, index) {
           final band = bands[index];
-          return _BandTile(band);
+          return _BandTile(band, onDelete: deleteBand);
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -55,26 +55,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  void deleteBand(Band band) => setState(() => bands.remove(band));
 }
 
 class _BandTile extends StatelessWidget {
-  const _BandTile(this.band, {Key key}) : super(key: key);
+  const _BandTile(this.band, {Key key, this.onDelete}) : super(key: key);
 
   final Band band;
+  final Function(Band) onDelete;
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.blue.shade100,
-        child: Text(band.name.substring(0, 2)),
+    return Dismissible(
+      key: Key(band.id),
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) => onDelete(band),
+      background: Container(
+        padding: const EdgeInsets.only(left: 15.0),
+        alignment: Alignment.centerLeft,
+        color: Colors.red,
+        child: const Text(
+          'Delete band',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      title: Text(band.name),
-      trailing: Text(
-        band.votes.toString(),
-        style: const TextStyle(fontSize: 20.0),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.blue.shade100,
+          child: Text(band.name.substring(0, 2)),
+        ),
+        title: Text(band.name),
+        trailing: Text(
+          band.votes.toString(),
+          style: const TextStyle(fontSize: 20.0),
+        ),
+        onTap: () {},
       ),
-      onTap: () {},
     );
   }
 }
