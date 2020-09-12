@@ -1,8 +1,4 @@
 class Band {
-  String id;
-  String name;
-  int votes;
-
   Band({
     this.id,
     this.name,
@@ -16,4 +12,8 @@ class Band {
       votes: map['votes'],
     );
   }
+
+  String id;
+  String name;
+  int votes;
 }
