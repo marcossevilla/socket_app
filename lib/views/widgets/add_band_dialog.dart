@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'package:provider/provider.dart';
+
+import '../../blocs/socket_bloc.dart';
+
 class AddBandDialog extends StatefulWidget {
   const AddBandDialog({
     Key key,
@@ -63,7 +67,9 @@ class _AddBandDialogState extends State<AddBandDialog> {
 
   void addBand() {
     if (textController.text.length > 1) {
-      widget.confirmationAction(textController.text);
+      context.read<SocketBloc>().emit('add_band', {
+        'name': textController.text,
+      });
     }
 
     Navigator.of(context).pop();

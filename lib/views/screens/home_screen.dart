@@ -57,11 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
       ),
       body: ListView.builder(
+        shrinkWrap: true,
         itemCount: bands.length,
-        itemBuilder: (context, index) {
-          final band = bands[index];
-          return _BandTile(band, onDelete: deleteBand);
-        },
+        itemBuilder: (context, index) => _BandTile(bands[index]),
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 0.0,
@@ -72,31 +70,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void addNewBand() {
-    showDialog(
-      context: context,
-      builder: (context) => AddBandDialog(
-        confirmationAction: (String bandName) {
-          context.read<SocketBloc>().emit('add_band', {'name': bandName});
-        },
-      ),
-    );
+    showDialog(context: context, builder: (context) => const AddBandDialog());
   }
-
-  void deleteBand(Band band) => setState(() => bands.remove(band));
 }
 
 class _BandTile extends StatelessWidget {
-  const _BandTile(this.band, {Key key, this.onDelete}) : super(key: key);
+  const _BandTile(this.band, {Key key}) : super(key: key);
 
   final Band band;
-  final Function(Band) onDelete;
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: Key(band.id),
       direction: DismissDirection.startToEnd,
-      onDismissed: (direction) => onDelete(band),
+      onDismissed: (_) {
+        context.read<SocketBloc>().emit('delete_band', {'id': band.id});
+      },
       background: Container(
         padding: const EdgeInsets.only(left: 15.0),
         alignment: Alignment.centerLeft,
