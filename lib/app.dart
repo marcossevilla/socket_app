@@ -17,11 +17,12 @@ class SocketApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: name,
-        initialRoute: StatusScreen.route,
+        initialRoute: HomeScreen.route,
         routes: {
           HomeScreen.route: (_) => HomeScreen(),
           StatusScreen.route: (_) => StatusScreen(),
         },
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

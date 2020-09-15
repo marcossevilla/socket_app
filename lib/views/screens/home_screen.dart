@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
+import '../../blocs/socket_bloc.dart';
 import '../../models/band.dart';
 import '../widgets/add_band_dialog.dart';
 
@@ -13,20 +16,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var bands = <Band>[
-    Band(id: '0', name: 'Red Hot Chili Peppers', votes: 5),
-    Band(id: '2', name: 'Muse', votes: 3),
-    Band(id: '1', name: 'Queen', votes: 8),
-  ];
+  var bands = <Band>[];
+
+  @override
+  void initState() {
+    context.read<SocketBloc>().socket.on('active_bands', (payload) {
+      bands = (payload as List).map((band) => Band.fromMap(band)).toList();
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    context.read<SocketBloc>().socket.off('active_bands');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final status = context.select((SocketBloc bloc) => bloc.status);
+
     return Scaffold(
       appBar: AppBar(
+        brightness: Brightness.light,
         title: const Text(
           'BandNames',
           style: TextStyle(color: Colors.black87),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: status == ServerStatus.online
+                ? const Icon(Icons.check_circle, color: Colors.green)
+                : const Icon(Icons.offline_bolt, color: Colors.red),
+          ),
+        ],
         elevation: 1.0,
         backgroundColor: Colors.white,
       ),
@@ -87,7 +112,7 @@ class _BandTile extends StatelessWidget {
         ),
         title: Text(band.name),
         trailing: Text(
-          band.votes.toString(),
+          '${band.votes}',
           style: const TextStyle(fontSize: 20.0),
         ),
         onTap: () {},

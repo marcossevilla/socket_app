@@ -7,9 +7,9 @@ class Band {
 
   factory Band.fromMap(Map<String, Object> map) {
     return Band(
-      id: map['id'],
-      name: map['name'],
-      votes: map['votes'],
+      id: map.containsKey('id') ? map['id'] : 'no-id',
+      name: map.containsKey('name') ? map['name'] : 'no-name',
+      votes: map.containsKey('votes') ? map['votes'] : 'no-votes',
     );
   }
 
