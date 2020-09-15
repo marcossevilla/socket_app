@@ -14,6 +14,16 @@ class StatusScreen extends StatelessWidget {
     final bloc = context.watch<SocketBloc>();
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        iconTheme: const IconThemeData(color: Colors.black),
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Socket Status',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -21,15 +31,6 @@ class StatusScreen extends StatelessWidget {
             Text('Server status: ${bloc.status}'),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          bloc.emit(
-            'emit_message',
-            {'name': 'Flutter', 'message': 'Hello'},
-          );
-        },
       ),
     );
   }

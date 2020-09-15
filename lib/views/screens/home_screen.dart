@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:socket_app/views/screens/status_screen.dart';
 
 import '../../blocs/socket_bloc.dart';
 import '../../models/band.dart';
@@ -45,11 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.black87),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: status == ServerStatus.online
+          IconButton(
+            icon: status == ServerStatus.online
                 ? const Icon(Icons.check_circle, color: Colors.green)
                 : const Icon(Icons.offline_bolt, color: Colors.red),
+            onPressed: () => Navigator.of(context).push(StatusScreen.go()),
           ),
         ],
         elevation: 0,
@@ -74,8 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (context) => AddBandDialog(
-        confirmationAction: (Band newBand) {
-          setState(() => bands.add(newBand));
+        confirmationAction: (String bandName) {
+          context.read<SocketBloc>().emit('add_band', {'name': bandName});
         },
       ),
     );

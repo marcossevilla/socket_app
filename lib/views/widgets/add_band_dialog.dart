@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../models/band.dart';
-
 class AddBandDialog extends StatefulWidget {
   const AddBandDialog({
     Key key,
@@ -15,7 +13,7 @@ class AddBandDialog extends StatefulWidget {
   static const Text dialogTitle = Text('New band name');
   static const Text cancelButtonText = Text('Cancel');
 
-  final Function(Band) confirmationAction;
+  final Function(String) confirmationAction;
 
   @override
   _AddBandDialogState createState() => _AddBandDialogState();
@@ -65,13 +63,7 @@ class _AddBandDialogState extends State<AddBandDialog> {
 
   void addBand() {
     if (textController.text.length > 1) {
-      widget.confirmationAction(
-        Band(
-          id: DateTime.now().toString(),
-          name: textController.text,
-          votes: 1,
-        ),
-      );
+      widget.confirmationAction(textController.text);
     }
 
     Navigator.of(context).pop();
