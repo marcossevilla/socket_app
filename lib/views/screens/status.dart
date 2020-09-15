@@ -13,9 +13,14 @@ class StatusScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final socket = context.watch<SocketBloc>();
 
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('Hello world!'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Server status: ${socket.status}'),
+          ],
+        ),
       ),
     );
   }

@@ -9,14 +9,20 @@ class SocketBloc with ChangeNotifier {
   }
 
   ServerStatus _status = ServerStatus.connecting;
+  ServerStatus get status => _status;
 
   void _initBloc() {
-    var socket = io.io(
-      'http://localhost:3001',
-      {
-        'transports': ['websocket'],
-        'autoConnect': true,
-      },
-    )..on('connect', (_) => print('connected to server'));
+    io.io('http://localhost:3001', {
+      'transports': ['websocket'],
+      'autoConnect': true,
+    })
+      ..on('connect', (_) {
+        _status = ServerStatus.online;
+        notifyListeners();
+      })
+      ..on('disconnect', (_) {
+        _status = ServerStatus.offline;
+        notifyListeners();
+      });
   }
 }
