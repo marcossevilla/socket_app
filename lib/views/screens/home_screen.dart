@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 : const Icon(Icons.offline_bolt, color: Colors.red),
           ),
         ],
-        elevation: 1.0,
+        elevation: 0,
         backgroundColor: Colors.white,
       ),
       body: ListView.builder(
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        elevation: 1.0,
+        elevation: 0.0,
         child: const Icon(Icons.add),
         onPressed: addNewBand,
       ),
@@ -115,7 +115,9 @@ class _BandTile extends StatelessWidget {
           '${band.votes}',
           style: const TextStyle(fontSize: 20.0),
         ),
-        onTap: () {},
+        onTap: () {
+          context.read<SocketBloc>().emit('vote_band', {'id': band.id});
+        },
       ),
     );
   }
