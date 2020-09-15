@@ -11,8 +11,13 @@ class SocketBloc with ChangeNotifier {
   ServerStatus _status = ServerStatus.connecting;
   ServerStatus get status => _status;
 
+  io.Socket _socket;
+  io.Socket get socket => _socket;
+
+  Function get emit => _socket.emit;
+
   void _initBloc() {
-    io.io('http://localhost:3001', {
+    _socket = io.io('http://localhost:3001', {
       'transports': ['websocket'],
       'autoConnect': true,
     })

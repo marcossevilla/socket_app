@@ -11,16 +11,25 @@ class StatusScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final socket = context.watch<SocketBloc>();
+    final bloc = context.watch<SocketBloc>();
 
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Server status: ${socket.status}'),
+            Text('Server status: ${bloc.status}'),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          bloc.emit(
+            'emit_message',
+            {'name': 'Flutter', 'message': 'Hello'},
+          );
+        },
       ),
     );
   }
