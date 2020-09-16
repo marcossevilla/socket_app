@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:socket_app/views/screens/status_screen.dart';
 
 import '../../blocs/socket_bloc.dart';
 import '../../models/band.dart';
+import '../../views/screens/status_screen.dart';
 import '../widgets/add_band_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,12 +19,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var bands = <Band>[];
 
+  void _handleActiveBands(Object payload) {
+    bands = (payload as List).map((band) => Band.fromMap(band)).toList();
+    setState(() {});
+  }
+
   @override
   void initState() {
-    context.read<SocketBloc>().socket.on('active_bands', (payload) {
-      bands = (payload as List).map((band) => Band.fromMap(band)).toList();
-      setState(() {});
-    });
+    context.read<SocketBloc>().socket.on('active_bands', _handleActiveBands);
     super.initState();
   }
 
@@ -70,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void addNewBand() {
-    showDialog(context: context, builder: (context) => const AddBandDialog());
+    showDialog(context: context, builder: (_) => const AddBandDialog());
   }
 }
 

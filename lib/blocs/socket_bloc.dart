@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
+
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 enum ServerStatus { online, offline, connecting }
 
 class SocketBloc with ChangeNotifier {
   SocketBloc() {
-    _initBloc();
+    _init();
   }
 
   ServerStatus _status = ServerStatus.connecting;
@@ -16,7 +17,7 @@ class SocketBloc with ChangeNotifier {
 
   Function get emit => _socket.emit;
 
-  void _initBloc() {
+  void _init() {
     _socket = io.io('http://localhost:3001', {
       'transports': ['websocket'],
       'autoConnect': true,

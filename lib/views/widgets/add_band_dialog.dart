@@ -8,16 +8,11 @@ import 'package:provider/provider.dart';
 import '../../blocs/socket_bloc.dart';
 
 class AddBandDialog extends StatefulWidget {
-  const AddBandDialog({
-    Key key,
-    this.confirmationAction,
-  }) : super(key: key);
+  const AddBandDialog({Key key}) : super(key: key);
 
   static const Text buttonText = Text('Add');
   static const Text dialogTitle = Text('New band name');
   static const Text cancelButtonText = Text('Cancel');
-
-  final Function(String) confirmationAction;
 
   @override
   _AddBandDialogState createState() => _AddBandDialogState();
@@ -31,14 +26,12 @@ class _AddBandDialogState extends State<AddBandDialog> {
     if (Platform.isIOS || Platform.isMacOS) {
       return CupertinoAlertDialog(
         title: AddBandDialog.dialogTitle,
-        content: CupertinoTextField(
-          controller: textController,
-        ),
+        content: CupertinoTextField(controller: textController),
         actions: [
           CupertinoDialogAction(
+            onPressed: addBand,
             isDefaultAction: true,
             child: AddBandDialog.buttonText,
-            onPressed: addBand,
           ),
           CupertinoDialogAction(
             isDestructiveAction: true,
@@ -50,15 +43,13 @@ class _AddBandDialogState extends State<AddBandDialog> {
     } else {
       return AlertDialog(
         title: AddBandDialog.dialogTitle,
-        content: TextField(
-          controller: textController,
-        ),
+        content: TextField(controller: textController),
         actions: [
           MaterialButton(
             child: AddBandDialog.buttonText,
             elevation: 5.0,
-            textColor: Theme.of(context).primaryColor,
             onPressed: addBand,
+            textColor: Theme.of(context).primaryColor,
           ),
         ],
       );
@@ -67,9 +58,10 @@ class _AddBandDialogState extends State<AddBandDialog> {
 
   void addBand() {
     if (textController.text.length > 1) {
-      context.read<SocketBloc>().emit('add_band', {
-        'name': textController.text,
-      });
+      context.read<SocketBloc>().emit(
+        'add_band',
+        {'name': textController.text},
+      );
     }
 
     Navigator.of(context).pop();
