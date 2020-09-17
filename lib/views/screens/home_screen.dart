@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import 'package:provider/provider.dart';
 
@@ -58,10 +59,15 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemCount: bands.length,
-        itemBuilder: (context, index) => _BandTile(bands[index]),
+      body: Column(
+        children: [
+          if (bands.isNotEmpty) _pieChart(),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: bands.length,
+            itemBuilder: (context, index) => _BandTile(bands[index]),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 0.0,
@@ -73,6 +79,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void addNewBand() {
     showDialog(context: context, builder: (_) => const AddBandDialog());
+  }
+
+  Widget _pieChart() {
+    var dataMap = <String, double>{};
+    for (var band in bands) {
+      dataMap.putIfAbsent(band.name, () => band.votes.toDouble());
+    }
+
+    return Container(
+      margin: const EdgeInsets.all(20),
+      child: PieChart(
+        dataMap: dataMap,
+        chartType: ChartType.ring,
+        chartRadius: MediaQuery.of(context).size.width / 3,
+        animationDuration: const Duration(milliseconds: 500),
+        legendOptions: const LegendOptions(legendShape: BoxShape.circle),
+      ),
+    );
   }
 }
 
