@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pie_chart/pie_chart.dart';
 
 import 'package:provider/provider.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../../blocs/socket_bloc.dart';
 import '../../models/band.dart';
@@ -19,6 +19,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var bands = <Band>[];
+
+  final colors = <Color>[
+    Colors.red.shade100,
+    Colors.pink.shade100,
+    Colors.blue.shade100,
+    Colors.green.shade100,
+    Colors.yellow.shade100,
+    Colors.purple.shade100,
+  ];
 
   void _handleActiveBands(Object payload) {
     bands = (payload as List).map((band) => Band.fromMap(band)).toList();
@@ -91,10 +100,16 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: const EdgeInsets.all(20),
       child: PieChart(
         dataMap: dataMap,
+        colorList: colors,
         chartType: ChartType.ring,
         chartRadius: MediaQuery.of(context).size.width / 3,
         animationDuration: const Duration(milliseconds: 500),
         legendOptions: const LegendOptions(legendShape: BoxShape.circle),
+        chartValuesOptions: const ChartValuesOptions(
+          showChartValues: true,
+          showChartValueBackground: false,
+          showChartValuesInPercentage: true,
+        ),
       ),
     );
   }

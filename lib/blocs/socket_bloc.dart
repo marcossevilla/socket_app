@@ -18,7 +18,7 @@ class SocketBloc with ChangeNotifier {
   Function get emit => _socket.emit;
 
   void _init() {
-    _socket = io.io('http://localhost:3001', {
+    _socket = io.io('https://bandnames-server.herokuapp.com', {
       'transports': ['websocket'],
       'autoConnect': true,
     })
